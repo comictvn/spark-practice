@@ -1,0 +1,58 @@
+version: '2'
+
+services:
+  spark:
+    image: docker.io/bitnami/spark:3-debian-10
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - '8080:8080'
+      - '7077:7077'
+  spark-worker-1:
+    image: docker.io/bitnami/spark:3-debian-10
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_PUBLIC_DNS=localhost
+      - SPARK_WORKER_WEBUI_PORT=9001
+    ports:
+      - '9001:9001'
+    volumes:
+       - /Users/mac/Works/spark/pyspark/dataset/covid19:/Users/mac/Works/spark/pyspark/dataset/covid19
+       - type: volume
+         source: /Users/mac/Works/spark/pyspark/reports
+         target: /Users/mac/Works/spark/pyspark/reports
+         volume:
+          nocopy: false
+  spark-worker-2:
+    image: docker.io/bitnami/spark:3-debian-10
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_PUBLIC_DNS=localhost
+      - SPARK_WORKER_WEBUI_PORT=9002
+    ports:
+      - '9002:9002'
+    volumes:
+       - /Users/mac/Works/spark/pyspark/dataset/covid19:/Users/mac/Works/spark/pyspark/dataset/covid19
+       - type: volume
+         source: /Users/mac/Works/spark/pyspark/reports
+         target: /Users/mac/Works/spark/pyspark/reports
+         volume:
+          nocopy: false
